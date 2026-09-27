@@ -38,4 +38,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ## Tentang Produk
 
 Daymark adalah aplikasi untuk membantu pengguna mengatur
-dan memantau aktivitas harian.
+dan mencatat aktivitas harian secara lebih terorganisir.
