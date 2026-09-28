@@ -1,8 +1,8 @@
 # Dokumen Teknis Modul 1 — Lingkungan Pengembangan, Git, dan Lalu Lintas HTTP
 
-Nama/NIM : Rizqy Hergiansyah / [NIM]
+Nama/NIM : Rizqy Hergiansyah / 105224010
 
-Repositori : [Link repositori GitHub]
+Repositori : git@github.com:hergiansyah24/Praktikum-web-rizqy.git
 
 ## 1. Lingkungan Pengembangan
 
@@ -56,73 +56,37 @@ Pada saat menjalankan project, port 3000 sudah digunakan sehingga
 Next.js sempat menawarkan port alternatif. Project tetap dapat
 diakses melalui server yang berjalan pada port 3000.
 
+
 ## 2. Alur Kerja Git
 
-### 2.1 Pemeriksaan Repository
+### a. Keluaran git log --oneline --graph
 
-Pemeriksaan repository dilakukan menggunakan perintah:
+Hasil `git log --oneline --graph --all` menunjukkan adanya commit merge
+yang menggabungkan perubahan dari branch `latihan/konflik` ke branch `main`.
 
-```bash
-git status
-git log --oneline
-```
+Commit hasil merge adalah:
 
-Perintah `git status` digunakan untuk melihat kondisi repository dan branch yang sedang aktif. Sedangkan `git log --oneline` digunakan untuk melihat riwayat commit.
+`6068d55 merge: selesaikan konflik README`
 
-### 2.2 Membuat Commit
+### b. Tautan Pull Request yang Telah Digabungkan
 
-Perubahan pada `README.md` disimpan menggunakan commit:
+Tautan Pull Request:
+`[akan diisi setelah Pull Request berhasil di-merge]`
 
-```bash
-git add README.md
-git commit -m "docs: tambahkan deskripsi produk pada README"
-```
+### c. Konflik yang Terjadi, Cara Penyelesaian, dan Alasan Pemilihan Isi Akhir
 
-### 2.3 Membuat Branch
+Konflik terjadi pada file `README.md` karena branch `main` dan branch
+`latihan/konflik` memiliki perubahan pada bagian deskripsi produk.
 
-Branch baru dibuat dengan nama:
+Konflik diselesaikan menggunakan Merge Editor pada Visual Studio Code.
+Pada proses penyelesaian, dipilih perubahan dari branch yang digunakan
+sebagai sumber merge, kemudian file disimpan dan ditambahkan ke staging
+dengan `git add README.md`.
 
-```bash
-latihan/konflik
-```
-
-Pada branch tersebut dilakukan perubahan pada `README.md`. Setelah itu dilakukan perubahan berbeda pada `README.md` di branch `main`.
-
-### 2.4 Merge Conflict
-
-Branch `latihan/konflik` kemudian digabungkan ke `main` menggunakan:
-
-```bash
-git merge latihan/konflik
-```
-
-Proses merge menghasilkan conflict pada `README.md`. Conflict kemudian diselesaikan menggunakan Merge Editor pada Visual Studio Code.
-
-### 2.5 Menyelesaikan Conflict
-
-Setelah conflict selesai, file `README.md` ditambahkan ke staging:
-
-```bash
-git add README.md
-```
-
-Kemudian merge diselesaikan dengan commit:
+Setelah itu merge diselesaikan dengan commit:
 
 ```bash
 git commit -m "merge: selesaikan konflik README"
-```
-
-Merge berhasil menghasilkan commit:
-
-```text
-6068d55 merge: selesaikan konflik README
-```
-
-Riwayat commit kemudian diperiksa menggunakan:
-
-```bash
-git log --oneline --graph --all
-
 
 ## 3. Pengamatan Lalu Lintas HTTP
 
@@ -144,7 +108,7 @@ diproses oleh server.
 
 ### 3.2 Keluaran curl -I dan curl -v
 
-Pengujian dilakukan menggunakan perintah `curl.exe` melalui PowerShell untuk
+Pengujian dilakukan menggunakan perintah `curl.exe` melalui PowerSh ell untuk
 mengamati respons HTTP dari server lokal dan server eksternal.
 
 #### a. `curl.exe -I http://localhost:3000`
@@ -210,8 +174,6 @@ sehingga akses dari `http://github.com` diarahkan ke versi `https://github.com/`
 
 ## 4. Kendala dan Penyelesaian
 
-## 4. Kendala dan Penyelesaian
-
 Selama praktikum terdapat beberapa kendala. Pertama, saat menjalankan
 `npm run dev` dari folder `week-1`, terjadi error karena file `package.json`
 berada di dalam folder `nama-produk`. Kendala tersebut diselesaikan dengan
@@ -243,3 +205,8 @@ pada Windows PowerShell.
 Setiap langkah dan hasil pengujian diverifikasi secara langsung dengan
 menjalankan perintah Git, Next.js, Chrome DevTools, dan curl. Hasil yang
 dicatat pada dokumen berasal dari pengujian yang dilakukan selama praktikum.
+
+## Pull Request
+
+- Link PR: https://github.com/hergiansyah24/Praktikum-web-rizqy/pull/1
+- Status: Merged
