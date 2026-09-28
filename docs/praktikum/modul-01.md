@@ -59,7 +59,7 @@ diakses melalui server yang berjalan pada port 3000.
 
 ## 2. Alur Kerja Git
 
-### a. Keluaran git log --oneline --graph
+### 2.1 Keluaran git log --oneline --graph
 
 Hasil `git log --oneline --graph --all` menunjukkan adanya commit merge
 yang menggabungkan perubahan dari branch `latihan/konflik` ke branch `main`.
@@ -68,31 +68,27 @@ Commit hasil merge adalah:
 
 `6068d55 merge: selesaikan konflik README`
 
-### b. Tautan Pull Request yang Telah Digabungkan
+### 2.2 Tautan Pull Request yang Telah Digabungkan
 
 Tautan Pull Request:
 `[akan diisi setelah Pull Request berhasil di-merge]`
 
-### c. Konflik yang Terjadi, Cara Penyelesaian, dan Alasan Pemilihan Isi Akhir
+### 2.3 Konflik yang Terjadi, Cara Penyelesaian, dan Alasan Pemilihan Isi Akhir
 
-Konflik terjadi pada file `README.md` karena branch `main` dan branch
-`latihan/konflik` memiliki perubahan pada bagian deskripsi produk.
+Konflik terjadi pada file `README.md` karena branch `main` dan branch `latihan/konflik` memiliki perubahan pada bagian deskripsi produk.
 
-Konflik diselesaikan menggunakan Merge Editor pada Visual Studio Code.
-Pada proses penyelesaian, dipilih perubahan dari branch yang digunakan
-sebagai sumber merge, kemudian file disimpan dan ditambahkan ke staging
-dengan `git add README.md`.
-
-Setelah itu merge diselesaikan dengan commit:
+Konflik diselesaikan menggunakan Merge Editor pada Visual Studio Code. Pada proses penyelesaian, dipilih perubahan dari branch yang digunakan sebagai sumber merge, kemudian file disimpan dan ditambahkan ke staging dengan perintah:
 
 ```bash
-git commit -m "merge: selesaikan konflik README"
+git add README.md
+```
 
 ## 3. Pengamatan Lalu Lintas HTTP
 
 ### 3.1 Pengamatan Request Halaman Utama
 
 Pengamatan dilakukan menggunakan fitur Network pada Chrome DevTools.
+
 Saat halaman utama dibuka melalui `http://localhost:3000/`, diperoleh hasil:
 
 | Parameter | Hasil |
@@ -103,13 +99,11 @@ Saat halaman utama dibuka melalui `http://localhost:3000/`, diperoleh hasil:
 | Remote Address | `[::1]:3000` |
 | Referrer Policy | `strict-origin-when-cross-origin` |
 
-Status `200 OK` menunjukkan bahwa request ke halaman utama berhasil
-diproses oleh server.
+Status `200 OK` menunjukkan bahwa request ke halaman utama berhasil diproses oleh server.
 
 ### 3.2 Keluaran curl -I dan curl -v
 
-Pengujian dilakukan menggunakan perintah `curl.exe` melalui PowerSh ell untuk
-mengamati respons HTTP dari server lokal dan server eksternal.
+Pengujian dilakukan menggunakan perintah `curl.exe` melalui PowerShell untuk mengamati respons HTTP dari server lokal dan server eksternal.
 
 #### a. `curl.exe -I http://localhost:3000`
 
@@ -120,7 +114,37 @@ HTTP/1.1 200 OK
 Cache-Control: no-cache, must-revalidate
 X-Powered-By: Next.js
 Content-Type: text/html; charset=utf-8
-### Intinya untuk tabel pengamatan
+```
+
+Hasil tersebut menunjukkan bahwa server Next.js berhasil diakses dan memberikan respons `200 OK`.
+
+#### b. `curl.exe -I http://github.com`
+
+Hasil pengujian:
+
+```text
+HTTP/1.1 301 Moved Permanently
+Content-Length: 0
+Location: https://github.com/
+```
+
+Respons `301 Moved Permanently` menunjukkan bahwa alamat HTTP dialihkan ke alamat HTTPS.
+
+#### c. `curl.exe -v https://example.com`
+
+Hasil pengujian menunjukkan:
+
+```text
+< HTTP/1.1 200 OK
+< Content-Type: text/html
+< Server: cloudflare
+< allow: GET, HEAD
+< cf-cache-status: HIT
+```
+
+Perintah `-v` menampilkan informasi yang lebih lengkap mengenai proses koneksi dan request HTTP, termasuk request method, response status, header, dan informasi koneksi.
+
+### Intinya untuk Tabel Pengamatan
 
 | Perintah | Hasil | Keterangan |
 |---|---|---|
@@ -130,83 +154,64 @@ Content-Type: text/html; charset=utf-8
 
 ### 3.3 Analisis
 
-#### a. Perbedaan pemuatan dengan dan tanpa cache
+#### a. Perbedaan Pemuatan dengan dan Tanpa Cache
 
-Cache digunakan untuk menyimpan sementara resource yang sebelumnya sudah
-diterima dari server. Saat resource masih tersedia di cache dan dapat
-digunakan kembali, browser tidak selalu perlu mengambil resource tersebut
-secara penuh dari server. Hal ini dapat membuat proses pemuatan halaman
-menjadi lebih cepat dan ukuran data yang ditransfer dapat lebih kecil.
+Cache digunakan untuk menyimpan sementara resource yang sebelumnya sudah diterima dari server. Saat resource masih tersedia di cache dan dapat digunakan kembali, browser tidak selalu perlu mengambil resource tersebut secara penuh dari server.
 
-Sebaliknya, ketika cache tidak digunakan atau resource harus diambil kembali
-dari server, browser perlu melakukan request dan menerima data dari server.
-Akibatnya, waktu pemuatan dan jumlah data yang ditransfer dapat berbeda.
+Hal ini dapat membuat proses pemuatan halaman menjadi lebih cepat dan ukuran data yang ditransfer dapat lebih kecil.
 
-Pada pengamatan menggunakan Chrome DevTools, perbedaan cache dapat dilihat
-dari informasi pada Network, terutama pada proses pemuatan resource dan
-ukuran data yang ditransfer.
+Sebaliknya, ketika cache tidak digunakan atau resource harus diambil kembali dari server, browser perlu melakukan request dan menerima data dari server. Akibatnya, waktu pemuatan dan jumlah data yang ditransfer dapat berbeda.
 
-#### b. Alasan `curl -I` menggunakan metode HEAD
+Pada pengamatan menggunakan Chrome DevTools, perbedaan cache dapat dilihat dari informasi pada Network, terutama pada proses pemuatan resource dan ukuran data yang ditransfer.
 
-Perintah `curl -I` digunakan untuk mengambil header HTTP dari suatu resource
-tanpa mengambil isi halaman secara keseluruhan. Secara HTTP, opsi tersebut
-menggunakan metode `HEAD`.
+#### b. Alasan `curl -I` Menggunakan Metode HEAD
 
-Metode HEAD berguna untuk melihat informasi seperti status code,
-Content-Type, Cache-Control, dan header lainnya tanpa perlu menerima body
-dari halaman. Oleh karena itu, `curl -I` cocok digunakan untuk mengamati
-informasi respons server secara singkat.
+Perintah `curl -I` digunakan untuk mengambil header HTTP dari suatu resource tanpa mengambil isi halaman secara keseluruhan. Secara HTTP, opsi tersebut menggunakan metode `HEAD`.
 
-#### c. Alasan `http://github.com` dialihkan
+Metode HEAD berguna untuk melihat informasi seperti status code, Content-Type, Cache-Control, dan header lainnya tanpa perlu menerima body dari halaman.
 
-Berdasarkan hasil pengujian `curl.exe -I http://github.com`, server
-memberikan respons:
+Oleh karena itu, `curl -I` cocok digunakan untuk mengamati informasi respons server secara singkat.
 
+#### c. Alasan `http://github.com` Dialihkan
+
+Berdasarkan hasil pengujian `curl.exe -I http://github.com`, server memberikan respons:
+
+```text
 HTTP/1.1 301 Moved Permanently
+```
 
 dan terdapat header:
 
+```text
 Location: https://github.com/
+```
 
-Hal tersebut menunjukkan bahwa alamat HTTP tersebut mengarahkan client ke
-alamat HTTPS. HTTPS digunakan untuk komunikasi web yang terenkripsi,
-sehingga akses dari `http://github.com` diarahkan ke versi `https://github.com/`.
+Hal tersebut menunjukkan bahwa alamat HTTP tersebut mengarahkan client ke alamat HTTPS.
+
+HTTPS digunakan untuk komunikasi web yang terenkripsi, sehingga akses dari `http://github.com` diarahkan ke versi `https://github.com/`.
 
 ## 4. Kendala dan Penyelesaian
 
-Selama praktikum terdapat beberapa kendala. Pertama, saat menjalankan
-`npm run dev` dari folder `week-1`, terjadi error karena file `package.json`
-berada di dalam folder `nama-produk`. Kendala tersebut diselesaikan dengan
-masuk terlebih dahulu ke folder proyek menggunakan perintah:
+Selama praktikum terdapat beberapa kendala.
+
+Pertama, saat menjalankan `npm run dev` dari folder `week-1`, terjadi error karena file `package.json` berada di dalam folder `nama-produk`. Kendala tersebut diselesaikan dengan masuk terlebih dahulu ke folder proyek menggunakan perintah:
 
 ```bash
 cd nama-produk
+```
 
-Kedua, saat menggunakan perintah curl melalui PowerShell, perintah tersebut
-mengarah ke Invoke-WebRequest. Untuk menjalankan program curl yang sebenarnya,
-digunakan curl.exe, sehingga pengujian HTTP dapat dilakukan dengan benar.
+Kedua, saat menggunakan perintah `curl` melalui PowerShell, perintah tersebut mengarah ke `Invoke-WebRequest`. Untuk menjalankan program curl yang sebenarnya, digunakan `curl.exe`, sehingga pengujian HTTP dapat dilakukan dengan benar.
 
-Ketiga, terjadi konflik pada file README.md ketika branch
-latihan/konflik digabungkan ke branch main. Konflik diselesaikan menggunakan
-Merge Editor pada Visual Studio Code dengan menentukan isi akhir yang akan
-digunakan. Setelah itu file disimpan, ditambahkan kembali ke staging area, dan
-dibuat commit merge.
+Ketiga, terjadi konflik pada file `README.md` ketika branch `latihan/konflik` digabungkan ke branch `main`. Konflik diselesaikan menggunakan Merge Editor pada Visual Studio Code dengan menentukan isi akhir yang akan digunakan.
+
+Setelah itu file disimpan, ditambahkan kembali ke staging area, dan dibuat commit merge.
 
 ## 5. Catatan Pemanfaatan AI
 
-Dalam praktikum ini digunakan Gemini Ai sebagai bantuan dalam memahami
-langkah-langkah praktikum, menjelaskan konsep Git dan HTTP, serta membantu
-troubleshooting ketika terdapat kendala.
+Dalam praktikum ini digunakan Gemini AI sebagai bantuan dalam memahami langkah-langkah praktikum, menjelaskan konsep Git dan HTTP, serta membantu troubleshooting ketika terdapat kendala.
 
-Bantuan yang digunakan meliputi penjelasan penggunaan Git branch, merge,
-penyelesaian konflik, metode HTTP, kode status, serta penggunaan `curl.exe`
-pada Windows PowerShell.
+Bantuan yang digunakan meliputi penjelasan penggunaan Git branch, merge, penyelesaian konflik, metode HTTP, kode status, serta penggunaan `curl.exe` pada Windows PowerShell.
 
-Setiap langkah dan hasil pengujian diverifikasi secara langsung dengan
-menjalankan perintah Git, Next.js, Chrome DevTools, dan curl. Hasil yang
-dicatat pada dokumen berasal dari pengujian yang dilakukan selama praktikum.
+Setiap langkah dan hasil pengujian diverifikasi secara langsung dengan menjalankan perintah Git, Next.js, Chrome DevTools, dan curl.
 
-## Pull Request
-
-- Link PR: https://github.com/hergiansyah24/Praktikum-web-rizqy/pull/1
-- Status: Merged
+Hasil yang dicatat pada dokumen berasal dari pengujian yang dilakukan selama praktikum.
